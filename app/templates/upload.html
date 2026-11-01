@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Upload resource - Notes Hub{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <h1>Upload a resource</h1>
+  <p class="lede">PDF, PPT or PPTX, up to {{ max_upload_mb }} MB.</p>
+</header>
+
+<form id="upload-form" class="form-wide" method="post" action="{{ url_for('main.upload') }}" enctype="multipart/form-data" data-max-mb="{{ max_upload_mb }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="field">
+    <label for="title">Title</label>
+    <input id="title" name="title" type="text" required minlength="3" maxlength="120" value="{{ form.get('title', '') }}" placeholder="e.g. Operating systems, unit 2 notes">
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="subject">Subject</label>
+      <input id="subject" name="subject" type="text" required minlength="2" maxlength="60" value="{{ form.get('subject', '') }}" placeholder="e.g. Operating Systems" aria-describedby="subject-hint">
+      <p id="subject-hint" class="hint">Use the same spelling as other uploads so filters group them together.</p>
+    </div>
+    <div class="field">
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="" disabled {% if not form.get('category') %}selected{% endif %}>Choose a category</option>
+        {% for c in categories %}
+          <option value="{{ c }}" {% if form.get('category') == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="description">Description <span class="optional">(optional)</span></label>
+    <textarea id="description" name="description" rows="4" maxlength="500">{{ form.get('description', '') }}</textarea>
+  </div>
+
+  <div class="field">
+    <label for="file">File</label>
+    <input id="file" name="file" type="file" required accept=".pdf,.ppt,.pptx" aria-describedby="file-hint file-error">
+    <p id="file-hint" class="hint"></p>
+    <p id="file-error" class="field-error" role="alert"></p>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="btn">Upload resource</button>
+    <a class="btn btn-secondary" href="{{ url_for('main.library') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/upload.js') }}" defer></script>
+{% endblock %}

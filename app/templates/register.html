@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Create account - Notes Hub{% endblock %}
+{% block body_class %}auth{% endblock %}
+{% block main_class %}auth-layout{% endblock %}
+{% block flashes %}{% endblock %}
+
+{% block content %}
+<section class="auth-intro">
+  <p class="brand">Notes Hub</p>
+  <h1>Add your notes to the shelf.</h1>
+  <p>Create a free account to upload your own notes and download what others have shared.</p>
+  <ul class="facts">
+    <li>Your password is stored as a salted hash, never as plain text.</li>
+    <li>You can delete your own uploads at any time.</li>
+    {% if config.ALLOWED_EMAIL_DOMAIN %}<li>Sign-up is limited to @{{ config.ALLOWED_EMAIL_DOMAIN }} email addresses.</li>{% endif %}
+  </ul>
+</section>
+
+<section class="auth-panel">
+  <div class="auth-form">
+    <h2>Create account</h2>
+    {% include "_flashes.html" %}
+    <form method="post" action="{{ url_for('auth.register') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="60" value="{{ form.get('name', '') }}">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required maxlength="120" value="{{ form.get('email', '') }}">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" required minlength="{{ config.MIN_PASSWORD_LENGTH }}" maxlength="128" aria-describedby="password-hint">
+        <p id="password-hint" class="hint">At least {{ config.MIN_PASSWORD_LENGTH }} characters.</p>
+      </div>
+      <div class="field">
+        <label for="confirm_password">Confirm password</label>
+        <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required maxlength="128">
+      </div>
+      <button type="submit" class="btn btn-block">Create account</button>
+    </form>
+    <p class="switch">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+  </div>
+</section>
+{% endblock %}

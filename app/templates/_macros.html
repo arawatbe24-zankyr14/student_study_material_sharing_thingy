@@ -1,0 +1,22 @@
+{# One resource in a list. Keep the markup in sync with buildRow() in static/js/library.js #}
+{% macro resource_row(r, can_delete=false) %}
+<li class="resource" data-resource data-type="{{ r.file_type }}">
+  <span class="resource-type">{{ r.file_type|upper }}</span>
+  <div class="resource-main">
+    <h3 class="resource-title">{{ r.title }}</h3>
+    {% if r.description %}<p class="resource-desc">{{ r.description }}</p>{% endif %}
+    <p class="resource-tags"><span class="tag">{{ r.subject }}</span><span class="tag">{{ r.category }}</span></p>
+  </div>
+  <div class="resource-meta">
+    <span>{{ r.uploader_name }}</span>
+    <span>{{ r.uploaded_at|datefmt }}</span>
+    <span>{{ r.file_size|filesize }}</span>
+  </div>
+  <div class="resource-actions">
+    <a class="btn btn-small" href="{{ url_for('main.download', resource_id=r.resource_id) }}">Download</a>
+    {% if can_delete %}
+      <button type="button" class="btn btn-small btn-danger" data-delete-id="{{ r.resource_id }}" data-title="{{ r.title }}">Delete</button>
+    {% endif %}
+  </div>
+</li>
+{% endmacro %}

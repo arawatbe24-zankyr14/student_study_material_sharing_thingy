@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Log in - Notes Hub{% endblock %}
+{% block body_class %}auth{% endblock %}
+{% block main_class %}auth-layout{% endblock %}
+{% block flashes %}{% endblock %}
+
+{% block content %}
+<section class="auth-intro">
+  <p class="brand">Notes Hub</p>
+  <h1>Share what you've written. Find what you missed.</h1>
+  <p>Lecture notes, assignments and slides from your classmates, all in one library.</p>
+  <ul class="facts">
+    <li>Upload PDF, PPT and PPTX files up to {{ max_upload_mb }} MB.</li>
+    <li>Search by title and filter by subject or category.</li>
+    <li>Only registered students can download.</li>
+  </ul>
+</section>
+
+<section class="auth-panel">
+  <div class="auth-form">
+    <h2>Log in</h2>
+    {% include "_flashes.html" %}
+    <form method="post" action="{{ url_for('auth.login', next=request.args.get('next')) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required maxlength="120" value="{{ form.get('email', '') }}">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-block">Log in</button>
+    </form>
+    <p class="switch">New here? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}

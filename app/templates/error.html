@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }} - Notes Hub{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <p class="error-code">{{ code }}</p>
+  <h1>{{ message }}</h1>
+  <div class="actions">
+    {% if current_user %}
+      <a class="btn" href="{{ url_for('main.dashboard') }}">Go to dashboard</a>
+    {% else %}
+      <a class="btn" href="{{ url_for('auth.login') }}">Go to log in</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Library - Notes Hub{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <h1>Resource library</h1>
+  <p class="lede">Newest uploads first.</p>
+</header>
+
+<form id="filters" class="filters" role="search" autocomplete="off">
+  <div class="field grow">
+    <label for="q">Search titles</label>
+    <input id="q" name="q" type="search" maxlength="100" placeholder="e.g. operating systems unit 2">
+  </div>
+  <div class="field">
+    <label for="subject">Subject</label>
+    <select id="subject" name="subject">
+      <option value="">All subjects</option>
+      {% for s in subjects %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label for="category">Category</label>
+    <select id="category" name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+    </select>
+  </div>
+  <button type="button" id="clear-filters" class="btn btn-secondary">Clear filters</button>
+</form>
+
+<p id="result-count" class="result-count" aria-live="polite"></p>
+<div id="feedback" aria-live="polite"></div>
+<ul id="results" class="resource-list"></ul>
+<noscript><p class="flash flash-error">The library needs JavaScript to load resources. Please enable it and reload.</p></noscript>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/library.js') }}" defer></script>
+{% endblock %}

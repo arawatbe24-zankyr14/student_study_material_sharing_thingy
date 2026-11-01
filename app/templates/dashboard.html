@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_macros.html" import resource_row %}
+{% block title %}Dashboard - Notes Hub{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <h1>Hi, {{ current_user.name }}</h1>
+  <p class="lede">
+    {% if my_resources %}You have shared {{ my_resources|length }} resource{{ '' if my_resources|length == 1 else 's' }}.
+    {% else %}You have not shared anything yet.{% endif %}
+  </p>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('main.upload') }}">Upload resource</a>
+    <a class="btn btn-secondary" href="{{ url_for('main.library') }}">Browse library</a>
+  </div>
+</header>
+
+<section class="section" aria-labelledby="mine-heading">
+  <h2 id="mine-heading">Your uploads</h2>
+  <ul id="my-list" class="resource-list" data-empty-id="my-empty" {% if not my_resources %}hidden{% endif %}>
+    {% for r in my_resources %}{{ resource_row(r, can_delete=true) }}{% endfor %}
+  </ul>
+  <div id="my-empty" class="empty" {% if my_resources %}hidden{% endif %}>
+    <h3>Nothing uploaded yet</h3>
+    <p>Share your lecture notes, assignments or slides so classmates can find them.</p>
+    <a class="btn btn-small" href="{{ url_for('main.upload') }}">Upload your first resource</a>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="recent-heading">
+  <div class="section-head">
+    <h2 id="recent-heading">Latest in the library</h2>
+    <a href="{{ url_for('main.library') }}">Browse everything</a>
+  </div>
+  {% if recent %}
+    <ul class="resource-list">
+      {% for r in recent %}{{ resource_row(r) }}{% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <h3>The library is empty</h3>
+      <p>No resources have been shared yet. Yours could be the first.</p>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
